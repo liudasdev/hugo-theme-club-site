@@ -1,0 +1,20 @@
+{{ define "main" }}
+{{ partial "breadcrumb" . }}
+<div class="columns">
+  <div class="column is-4 is-hidden-mobile">
+    <figure class="image">
+      {{ partial "event/image" . }}
+    </figure>
+  </div>
+  <div class="column">
+    <section class="section pt-0 mt-0">
+      <div class="container">
+        <h1 class="title">{{ .Title }}</h1>
+        <div class="container content">
+        {{ .Content }}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{{ end }}

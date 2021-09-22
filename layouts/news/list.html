@@ -1,0 +1,141 @@
+{{ define "main" }}
+
+  <div class="columns">
+    <div class="column">
+      <div class="is-hidden-desktop">
+      {{ template "touchLayout" . }}
+      </div>
+
+      <div class="is-hidden-touch">
+      {{ template "desktopLayout" . }}
+      </div>
+
+      <section class="section is-medium">
+      {{ partial "pagination.html" . }}
+      </section>
+    </div>
+    <div class="column is-narrow">
+      <div class="is-hidden-mobile">
+        {{ .Render "sideBar" }}
+      </div>
+    </div>
+  </div>
+
+{{ end }}
+
+{{ define "touchLayout" }}
+
+  {{ $LAYOUT_ITEM_COUNT := 3 }}
+  {{ $items := .Paginator.Pages.ByDate.Reverse }}
+  {{ $count := sub (len $items) 1 }}
+
+  <div class="columns is-multiline is-mobile is-variable is-1-mobile">
+  {{ range $index, $value := $items }}
+
+    {{ $isTouch0 := eq $index 0 | or (modBool $index $LAYOUT_ITEM_COUNT) }}
+    {{ $isTouch1 := eq $index 1 | or (modBool (sub $index 1) $LAYOUT_ITEM_COUNT) }}
+    {{ $isTouch2 := eq $index 2 | or (modBool (sub $index 2) $LAYOUT_ITEM_COUNT) }}
+
+    {{ $isLast := eq $index $count }}
+    {{ $size := cond ($isTouch0 | or ($isTouch1 | and $isLast)) "is-full" "is-half" }}
+    
+    <div class="column {{ $size }}">{{ template "item" .}}</div>
+
+  {{ end }}
+  </div>
+
+{{ end }}
+
+{{ define "desktopLayout" }}
+
+  {{ $LAYOUT_ITEM_COUNT := 5 }}
+  {{ $items := .Paginator.Pages.ByDate.Reverse }}
+  {{ $count := sub (len $items) 1 }}
+
+  <div class="columns is-multiline">
+  {{ range $index, $value := $items }}
+
+    {{ $isDesktop0 := eq $index 0 | or (modBool $index $LAYOUT_ITEM_COUNT) }}
+    {{ $isDesktop1 := eq $index 1 | or (modBool (sub $index 1) $LAYOUT_ITEM_COUNT) }}
+    {{ $isDesktop2 := eq $index 2 | or (modBool (sub $index 2) $LAYOUT_ITEM_COUNT) }}
+    {{ $isDesktop3 := eq $index 3 | or (modBool (sub $index 3) $LAYOUT_ITEM_COUNT) }}
+    {{ $isDesktop4 := eq $index 4 | or (modBool (sub $index 4) $LAYOUT_ITEM_COUNT) }}
+
+    {{ $isLast := eq $index $count }}
+    {{ $isOneBeforeLast := eq (add $index 1) $count }}
+
+    {{ $shouldHalfBeFull := $isLast | and $isDesktop0 }}
+    {{ $half := cond $shouldHalfBeFull "is-full" "is-half" }}
+
+    {{ $shouldThirdBeFull := $isLast | and $isDesktop2 }}
+    {{ $shouldThirdBeHalf := ($isOneBeforeLast | and $isDesktop2) | or ($isLast | and $isDesktop3) }}
+    {{ $third := cond $shouldThirdBeFull "is-full" (cond $shouldThirdBeHalf "is-half" "is-one-third") }}
+
+    {{ $isHalf := $isDesktop0 | or $isDesktop1 }}
+    {{ $size := cond $isHalf $half $third }}
+
+    <div class="column {{ $size }}">{{ template "item" .}}</div>
+
+  {{ end }}
+  </div>
+
+{{ end }}
+
+{{ define "item" }}
+  <article class="card is-full-height">
+    {{ template "itemCardImage" . }}
+    {{ template "itemCardContent" . }}
+  </article>
+{{ end }}
+
+{{ define "itemCardImage" }}
+  {{ if isset .Params "image" }}
+    <a href={{ .RelPermalink }}>
+      <div class="card-image">
+        <figure class="image is-3by2">
+          {{ partial "image" . }}
+        </figure>
+      </div>
+    </a>
+  {{ end }}
+{{ end }}
+
+{{ define "itemCardContent" }}
+  <div class="card-content">
+    <a href={{ .RelPermalink }}>
+      <p class="title is-size-5-mobile is-size-4-tablet is-size-3-desktop">{{ .Title }}</p>
+    </a>
+    <p class="subtitle has-text-grey-light is-size-6-mobile is-size-6-tablet is-size-5-desktop">{{ .Date.Format "January 2, 2006" }}</p>
+    {{ template "itemSummary" . }}
+  </div>
+{{ end }}
+
+{{ define "itemSummary" }}
+  <div class="is-hidden-mobile">
+    {{ template "itemSummaryTabletDesktop" . }}
+  </div>
+  <div class="is-hidden-tablet">
+    {{ template "itemSummaryMobile" . }}
+  </div>
+{{ end }}
+
+{{ define "itemSummaryTabletDesktop" }}
+  <p class="is-hidden-mobile">{{ .Summary }}</p>
+  {{ if .Truncated }}
+    {{ template "readMore" . }}
+  {{ end }}
+{{ end }}
+
+{{ define "readMore" }}
+  <a href={{ .RelPermalink }} class="has-text-weight-bold">
+    <p>Read more</p>
+  </a>
+{{ end }}
+
+{{ define "itemSummaryMobile" }}
+{{ $SUMMARY_LENGTH := 80 }}
+  <a href={{ .RelPermalink }}>
+    <p>{{ truncate $SUMMARY_LENGTH .Summary }}</p>
+    {{ template "readMore" . }}
+  </a>
+{{ end}}

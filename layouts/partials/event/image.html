@@ -1,0 +1,18 @@
+{{ $imageByType := dict "sd" "slim-ducks.png" "lt" "flag-lt.jpg" "lv" "flag-lv.jpg" "est" "flag-est.jpg" "blg" "flag-blg.jpg" "ger" "flag-ger.jpg" "slvk" "flag-slvk.jpg" "pl" "flag-pl.jpg" }}
+{{ $image := resources.Get (printf "images/%s" (index $imageByType .Params.eventType)) }}
+{{ if $image }}
+
+  {{ $blurImage := $image.Resize "50x" }}
+  {{ $image := $image.Resize "256x" }}
+  
+  <img
+    data-sizes="auto"
+    class="lazyload blur-up"
+    src={{ $blurImage.RelPermalink }}
+    data-srcset="
+      {{ $blurImage.RelPermalink }} 160w,
+      {{ $image.RelPermalink }} 320w
+    "
+    alt={{ .Title }}
+  />
+{{ end }}

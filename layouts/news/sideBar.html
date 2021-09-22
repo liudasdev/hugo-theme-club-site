@@ -1,0 +1,39 @@
+<div class="box">
+  <h1 class="title is-6">{{ .Params.sideBar.events }}</h1>
+
+  <ul>
+  {{ $events := where $.Site.RegularPages.ByDate "Section" "event" }}
+  {{ $now := now.Format "2006-01-02" }}
+  {{ $nextEvents := where $events "Params.startDate" ">=" $now }}
+
+  {{ range first 3 ($nextEvents.ByParam "startDate") }}
+    <li>{{ template "eventItem" . }}</li>
+  {{ end }}
+  </ul>
+</div>
+
+<div class="box">
+  <h1 class="title is-6">{{ .Params.sideBar.rating }}</h1>
+
+  {{ $rating := $.Site.Data.rating.Rating }}
+  {{ $data := $.Site.Data.rating.Data }}
+  {{ partial "rating/list" (dict "items" (first 10 $rating) "data" $data) }}
+</div>
+
+{{ define "eventItem" }}
+
+  <a href={{ .Permalink }}>
+    <article class="media">
+      <div class="media-content">
+        <p class="subtitle has-text-danger-dark is-size-7">{{ .Params.startDate }}</p>
+        <p class="title is-size-6">{{ .Title }}</p>
+      </div>
+      <figure class="media-left">
+        <p class="image is-64x64">
+          {{ partial "event/image" . }}
+        </p>
+      </figure>
+    </article>
+  </a>
+  
+{{ end }}

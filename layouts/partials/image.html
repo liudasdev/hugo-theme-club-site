@@ -1,0 +1,22 @@
+{{ if isset .Params "image" }}
+
+    {{ $image := resources.Get .Params.image }}
+    {{ $blurImage := $image.Resize "50x"  }}
+    {{ $image320 := $image.Resize "320x" }}
+    {{ $image768 := $image.Resize "768x" }}
+    {{ $image1024 := $image.Resize "1024x" }}
+
+    <img
+      data-sizes="auto"
+      class="lazyload blur-up is-cover"
+      src={{ $blurImage.RelPermalink }}
+      data-srcset="
+        {{ $blurImage.RelPermalink }} 160w,
+        {{ $image320.RelPermalink }} 320w,
+        {{ $image768.RelPermalink }} 768w,
+        {{ $image1024.RelPermalink }} 1024w
+      "
+      alt={{ .Title }}
+      />
+
+  {{ end }}

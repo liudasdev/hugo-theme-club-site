@@ -1,0 +1,34 @@
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      {{ template "brandLogo" . }}
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarMenu" class="navbar-menu">
+      <div class="navbar-end">
+        {{ $currentPage := . }}
+        {{ range .Site.Menus.main.ByWeight }}
+          {{ $isCurrentPage := $currentPage.HasMenuCurrent "main" .}}
+          {{ $activeClass := cond $isCurrentPage "is-active" "" }}
+          <a class="navbar-item {{ $activeClass }}" href={{ .URL }} title={{ .Title }}>{{ .Name }}</a>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</nav>
+
+{{ define "brandLogo" }}
+  <a class="navbar-item" href={{ .Site.Params.homePageURL }}>
+    {{ $logo := resources.Get .Site.Params.logo }}
+    {{ if $logo }}
+      {{ $logo := $logo.Resize "x128" }}
+      <img src={{ $logo.RelPermalink }} alt={{ .Title }}>
+    {{ end }}
+  </a>
+{{ end }}

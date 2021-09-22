@@ -1,0 +1,18 @@
+{{ define "main" }}
+{{ partial "breadcrumb" . }}
+<div class="columns">
+  <div class="column is-4">
+    {{ .Render "image" }}
+  </div>
+  <div class="column">
+    <section class="section pt-0 mt-0">
+      <div class="container">
+        <h1 class="title">{{ .Title }}</h1>
+        <div class="container">
+        {{ .Content }}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,46 @@
+{{ $data := .data }}
+<ul>
+{{ range .items }}
+  <li>
+    {{range $name, $points := . }}
+
+      {{ $ratingData := dict "name" $name "points" $points }}
+      {{ $playerData := index $data $name }}
+      {{ $defaultData := dict "image" "images/user.jpg" }}
+
+      {{ if $playerData }}
+        {{ template "listItem" (merge $ratingData $playerData) }}
+      {{ else }}
+        {{ template "listItem" (merge $ratingData $defaultData) }}
+      {{ end }}
+
+    {{end}}
+  </li>
+{{ end }}
+</ul>
+
+{{ define "listItem" }}
+{{ if .slug }}
+<a href={{ print "/member/" .slug }}>
+{{ end }}
+  <article class="media flex is-align-items-center">
+    <figure class="media-left">
+      <p class="image is-64x64 is-clipped">
+        {{ $image := resources.Get .image }}
+        {{ if $image }}
+        {{ $image := $image.Resize "128x" }}
+        <img class="lazyload blur-up" src={{ $image.RelPermalink }} alt={{ .name }}>
+        {{ end }}
+      </p>
+    </figure>
+    <div class="media-content">
+      {{ .name }}
+    </div>
+    <div class="media-right">
+      {{ .points }}
+    </div>
+  </article>
+{{ if .slug }}
+</a>
+{{ end }}
+{{ end }}

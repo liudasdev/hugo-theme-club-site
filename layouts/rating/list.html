@@ -1,0 +1,90 @@
+{{ define "main" }}
+
+<section class="section is-medium">
+{{ .Content }}
+</section>
+
+{{ $rating := $.Site.Data.rating.Rating }}
+{{ $data := $.Site.Data.rating.Data }}
+<br/>
+<div class="is-hidden-mobile">
+{{ template "topList" (dict "items" (first 5 $rating) "data" $data) }}
+{{ template "regularList" (dict "items" (after 5 $rating) "data" $data) }}
+</div>
+<div class="is-hidden-tablet">
+{{ template "regularList" (dict "items" $rating "data" $data) }}
+</div>
+
+{{ end }}
+
+{{ define "regularList" }}
+  <div class="mx-3-tablet-only mr-3-mobile">
+  {{ partial "rating/list" . }}
+  </div>
+{{ end }}
+
+
+{{ define "topList" }}
+<div class="columns">
+{{ $data := .data }}
+{{ range .items }}
+
+  {{range $name, $points := . }}
+
+    {{ $ratingData := dict "name" $name "points" $points }}
+    {{ $playerData := index $data $name }}
+    {{ $defaultData := dict "image" "images/user.jpg" }}
+    
+    {{ if $playerData }}
+      {{ template "topListItem" (merge $ratingData $playerData) }}
+    {{ else }}
+      {{ template "topListItem" (merge $ratingData $defaultData) }}
+    {{ end }}
+
+  {{end}}
+{{ end }}
+</div>
+{{ end }}
+
+{{ define "topListItem" }}
+<div class="column">
+  {{ if .slug }}
+  <a href={{ print "/member/" .slug }}>
+  {{ end }}
+    <div class="card is-full-height">
+      <div class="card-image">
+        {{ template "topListItemImage" . }}
+      </div>
+
+      <div class="card-content p-3 has-text-centered">
+        <h1 class="title is-6">{{ .name }}</h1>
+        {{ .points}}
+      </div>
+    </div>
+  {{ if .slug }}
+  </a>
+  {{ end }}
+</div>
+{{ end }}
+
+{{ define "topListItemImage" }}
+  <figure class="image is-2by3">
+    {{ $image := resources.Get .image }}
+    {{ if $image }}
+
+      {{ $blurImage := $image.Resize "50x" }}
+      {{ $image := $image.Resize "320x" }}
+
+      <img
+        data-sizes="auto"
+        class="lazyload blur-up"
+        src={{ $blurImage.RelPermalink }}
+        data-srcset="
+          {{ $blurImage.RelPermalink }} 160w,
+          {{ $image.RelPermalink }} 320w
+        "
+        alt={{ .Title }}
+      />
+    {{ end }}
+  </figure>
+{{ end}}

@@ -1,0 +1,19 @@
+<figure class="image is-2by3">
+  {{ $image := resources.Get .Params.image }}
+  {{ if $image }}
+
+    {{ $blurImage := $image.Resize "50x" }}
+    {{ $image := $image.Resize "320x" }}
+
+    <img
+      data-sizes="auto"
+      class="lazyload blur-up is-cover"
+      src={{ $blurImage.RelPermalink }}
+      data-srcset="
+        {{ $blurImage.RelPermalink }} 160w,
+        {{ $image.RelPermalink }} 320w
+      "
+      alt={{ .Title }}
+    />
+  {{ end }}
+</figure>

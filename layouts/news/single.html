@@ -1,0 +1,18 @@
+{{ define "main" }}
+
+  {{ partial "breadcrumb" . }}
+
+  <section class="section is-medium">
+    <h1 class="title">{{ .Title }}</h1>
+    <h2 class="subtitle has-text-grey-light">{{ .Date.Format "Monday, January 2, 2006" }}</h1>
+  </section>
+
+  <figure class="image">
+    {{ partial "image" . }}
+  </figure>
+
+  <section class="section content">
+    {{ .Content }}
+  </section>
+
+{{ end }}

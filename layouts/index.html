@@ -1,0 +1,30 @@
+{{ define "title" }}
+{{ .Title }}
+{{ end }}
+
+{{ define "identify" }}
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+{{ end }}
+
+{{ define "main" }}
+
+<section class="section is-medium">
+  <h1 class="title">{{ .Title }}</h1>
+  <p class="subtitle">{{ .Params.subtitle }}</p>
+</section>
+
+<figure class="image">
+  {{ partial "image" . }}
+</figure>
+
+<div class="box">
+  <div class="content">{{ .Content }}</div>
+</div>
+
+{{ end }}
+
+{{ define "identifyInit" }}
+  {{ $opts := dict "targetPath" "identity-init.js" "minify" "true" }}
+  {{ $built := resources.Get "js/identity-init.js" | js.Build $opts }}
+  <script type="text/javascript">{{ $built.Content | safeJS }}</script>
+{{ end }}

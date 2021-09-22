@@ -1,0 +1,97 @@
+{{ $hasPagination := gt .Paginator.TotalPages 1 }}
+{{ if $hasPagination }}
+  {{ template "pagination" . }}
+{{ end }}
+
+{{ define "pagination" }}
+<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+
+  {{ template "prevButton" . }}
+  {{ template "nextButton" . }}
+
+  <ul class="pagination-list is-hidden-touch">
+
+    {{ template "firstNumber" . }}
+    {{ template "prevSection" . }}
+    {{ template "currentNumber" . }}
+    {{ template "nextSection" . }}
+    {{ template "lastNumber" . }}
+  </ul>
+
+</nav>
+{{ end }}
+
+{{ define "prevButton" }}
+  {{ if .Paginator.HasPrev }}
+  <a href={{ .Paginator.Prev.URL }} class="pagination-previous">{{ .Params.next }}</a>
+  {{ end }}
+{{ end }}
+
+{{ define "nextButton" }}
+  {{ if .Paginator.HasNext }}
+  <a href={{ .Paginator.Next.URL }} class="pagination-next">{{ .Params.prev }}</a>
+  {{ end }}
+{{ end }}
+
+{{ define "firstNumber" }}
+
+  {{ $firstNumber := .Paginator.First.PageNumber }}
+  {{ $showFirst := ne .Paginator.PageNumber $firstNumber }}
+
+  {{ if $showFirst }}
+    <li><a href={{ .Paginator.First.URL }} class="pagination-link" aria-label="Goto page {{ $firstNumber }}">{{ $firstNumber }}</a></li>
+  {{ end }}
+{{ end }}
+
+{{ define "prevSection" }}
+  {{ if .Paginator.HasPrev }}
+
+    {{ $firstNumber := .Paginator.First.PageNumber }}
+    {{ $prevPageNumber := .Paginator.Prev.PageNumber }}
+
+    {{ $hasPrevEllipsis := gt (sub $prevPageNumber $firstNumber) 1 }}
+    {{ if $hasPrevEllipsis }}
+    <li><span class="pagination-ellipsis">&hellip;</span></li>
+    {{ end }}
+
+    {{ $showPrev := ne $firstNumber $prevPageNumber }}
+    {{ if $showPrev }}
+    <li><a href={{ .Paginator.Prev.URL }} class="pagination-link" aria-label="Goto page {{ $prevPageNumber }}">{{ $prevPageNumber }}</a></li>
+    {{ end }}
+
+  {{ end }}
+{{ end }}
+
+{{ define "currentNumber" }}
+  {{ $currentPageNumber := .Paginator.PageNumber }}
+  <li><a class="pagination-link is-current" aria-label="Page {{ $currentPageNumber }}" aria-current="page">{{ $currentPageNumber }}</a></li>
+{{ end }}
+
+{{ define "nextSection" }}
+  {{ if .Paginator.HasNext }}
+
+    {{ $lastNumber := .Paginator.Last.PageNumber }}
+    {{ $nextPageNumber := .Paginator.Next.PageNumber }}
+
+    {{ $showNext := ne $lastNumber $nextPageNumber }}
+    {{ if $showNext }}
+    <li><a href={{ .Paginator.Next.URL }} class="pagination-link" aria-label="Goto page {{ $nextPageNumber }}">{{ $nextPageNumber }}</a></li>
+    {{ end }}
+
+    {{ $hasNextEllipsis := gt (sub $lastNumber $nextPageNumber) 1 }}
+    {{ if $hasNextEllipsis }}
+    <li><span class="pagination-ellipsis">&hellip;</span></li>
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ define "lastNumber" }}
+
+  {{ $lastNumber := .Paginator.Last.PageNumber }}
+  {{ $showLast := ne .Paginator.PageNumber $lastNumber }}
+
+  {{ if $showLast }}
+  <li><a href={{ .Paginator.Last.URL }} class="pagination-link" aria-label="Goto page {{ $lastNumber }}">{{ $lastNumber }}</a></li>
+  {{ end }}
+
+{{ end }}

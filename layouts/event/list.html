@@ -1,0 +1,61 @@
+{{ define "main" }}
+
+<div class="columns">
+  <div class="column">
+    {{ template "nextEvents" . }}
+  </div>
+  <div class="column">
+    {{ template "prevEvents" . }}
+  </div>
+</div>
+
+{{ end }}
+
+{{ define "nextEvents" }}
+
+  <section class="section is-medium">
+    {{ .Params.next }}
+  </section>
+  
+  {{ $now := now.Format "2006-01-02" }}
+  {{ $nextEvents := where .Pages "Params.startDate" ">=" $now }}
+
+  {{ range first 5 ($nextEvents.ByParam "startDate") }}
+    {{ template "event" . }}
+  {{ end }}
+
+{{ end }}
+
+{{ define "prevEvents" }}
+  
+  <section class="section is-medium">
+    {{ .Params.prev }}
+  </section>
+
+  {{ $now := now.Format "2006-01-02" }}
+  {{ $prevEvents := where .Pages "Params.startDate" "<" $now }}
+  
+  {{ range first 5 ($prevEvents.ByParam "startDate").Reverse }}
+    {{ template "event" . }}
+  {{ end }}
+
+{{ end }}
+
+{{ define "event" }}
+<a href={{ .RelPermalink }} class="box">
+  <article class="media">
+    <figure class="media-left">
+      <p class="image is-128x128">
+        {{ partial "event/image" . }}
+      </p>
+    </figure>
+    
+    <div class="media-content">
+      <p class="subtitle has-text-danger-dark is-size-6-tablet is-size-7-mobile">{{ .Params.startDate }}</p>
+      <p class="title is-size-5-tablet is-size-5-mobile">{{ .Params.title }}</p>
+      <p class="subtitle is-size-6-tablet is-size-6-mobile">{{ .Params.location }}</p>
+    </div>
+  </article>
+</a>
+
+{{ end }}

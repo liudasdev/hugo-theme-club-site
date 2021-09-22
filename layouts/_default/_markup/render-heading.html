@@ -1,0 +1,2 @@
+{{ $class := cond (eq .Level 1) "title" "subtitle" }}
+<h{{ .Level }} class={{ $class }}>{{ .Text | safeHTML }}</h{{ .Level }}>

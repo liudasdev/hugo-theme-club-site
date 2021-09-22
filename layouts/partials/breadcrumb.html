@@ -1,0 +1,15 @@
+<nav class="breadcrumb is-hidden-mobile pl-4" aria-label="breadcrumbs">
+  <ul>
+  {{ template "breadcrumbnav" (dict "p1" . "p2" .) }}
+  </ul>
+</nav>
+
+{{ define "breadcrumbnav" }}
+  {{ if .p1.Parent | and (not .p1.Parent.IsHome) }}
+    {{ template "breadcrumbnav" (dict "p1" .p1.Parent "p2" .p2 )  }}
+  {{ end }}
+  {{ $isActive := eq .p1 .p2 }}
+  <li{{ if $isActive }} class="is-active" {{ end }}>
+    <a href={{ .p1.Permalink }} {{ if $isActive }} aria-current="page" {{ end }}>{{ .p1.Title }}</a>
+  </li>
+{{ end }}
