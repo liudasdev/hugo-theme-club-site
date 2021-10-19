@@ -20,7 +20,7 @@
   {{ $now := now.Format "2006-01-02" }}
   {{ $nextEvents := where .Pages "Params.startDate" ">=" $now }}
 
-  {{ range first 5 ($nextEvents.ByParam "startDate") }}
+  {{ range first 10 ($nextEvents.ByParam "startDate") }}
     {{ template "event" . }}
   {{ end }}
 
@@ -35,7 +35,7 @@
   {{ $now := now.Format "2006-01-02" }}
   {{ $prevEvents := where .Pages "Params.startDate" "<" $now }}
   
-  {{ range first 5 ($prevEvents.ByParam "startDate").Reverse }}
+  {{ range first 10 ($prevEvents.ByParam "startDate").Reverse }}
     {{ template "event" . }}
   {{ end }}
 
