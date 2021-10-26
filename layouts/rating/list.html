@@ -8,11 +8,14 @@
 {{ $data := $.Site.Data.rating.Data }}
 <br/>
 <div class="is-hidden-mobile">
-{{ template "topList" (dict "items" (first 5 $rating) "data" $data) }}
-{{ template "regularList" (dict "items" (after 5 $rating) "data" $data) }}
+{{ $topCount := 5 }}
+{{ template "topList" (dict "items" (first $topCount $rating) "data" $data) }}
+{{ template "regularList" (dict "items" (after $topCount $rating) "data" $data) }}
 </div>
 <div class="is-hidden-tablet">
-{{ template "regularList" (dict "items" $rating "data" $data) }}
+{{ $topCount := 3 }}
+{{ template "topList" (dict "items" (first $topCount $rating) "data" $data) }}
+{{ template "regularList" (dict "items" (after $topCount $rating) "data" $data) }}
 </div>
 
 {{ end }}
@@ -25,7 +28,7 @@
 
 
 {{ define "topList" }}
-<div class="columns">
+<div class="columns is-mobile is-variable is-1">
 {{ $data := .data }}
 {{ range .items }}
 
