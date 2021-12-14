@@ -1,4 +1,4 @@
-{{ $imageByType := dict "sd" "slim-ducks.png" "ama" "slim-ducks-ama.png" "lt" "flag-lt.jpg" "lv" "flag-lv.jpg" "est" "flag-est.jpg" "blg" "flag-blg.jpg" "ger" "flag-ger.jpg" "slvk" "flag-slvk.jpg" "pl" "flag-pl.jpg" "it" "flag-it.jpg" "fr" "flag-fr.jpg" "aus" "flag-aus.jpg" }}
+{{ $imageByType := dict "sd" "slim-ducks.png" "sd-party" "slim-ducks-party.jpg" "ama" "slim-ducks-ama.png" "lt" "flag-lt.jpg" "lv" "flag-lv.jpg" "est" "flag-est.jpg" "blg" "flag-blg.jpg" "ger" "flag-ger.jpg" "slvk" "flag-slvk.jpg" "pl" "flag-pl.jpg" "it" "flag-it.jpg" "fr" "flag-fr.jpg" "aus" "flag-aus.jpg" }}
 {{ $image := resources.Get (printf "images/%s" (index $imageByType .Params.eventType)) }}
 {{ if $image }}
 
