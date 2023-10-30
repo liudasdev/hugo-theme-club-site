@@ -20,6 +20,8 @@
   {{ partial "rating/list" (dict "items" (first 10 $rating) "data" $data) }}
 </div>
 
+{{ partial "goat" . }}
+
 {{ define "eventItem" }}
 
   <a href={{ .Permalink }}>
