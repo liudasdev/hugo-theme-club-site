@@ -3,15 +3,15 @@
   {{ if $image }}
 
     {{ $blurImage := $image.Resize "50x" }}
-    {{ $image := $image.Resize "320x" }}
+    {{ $image := $image.Resize "640x" }}
 
     <img
       data-sizes="auto"
       class="lazyload blur-up is-cover"
       src={{ $blurImage.RelPermalink }}
       data-srcset="
-        {{ $blurImage.RelPermalink }} 160w,
-        {{ $image.RelPermalink }} 320w
+        {{ $blurImage.RelPermalink }} 320w,
+        {{ $image.RelPermalink }} 640w
       "
       alt={{ .Title }}
     />
