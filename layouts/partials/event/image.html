@@ -3,7 +3,7 @@
 {{ if $image }}
 
   {{ $blurImage := $image.Resize "50x" }}
-  {{ $image := $image.Resize "256x" }}
+  {{ $image := $image.Resize "640x" }}
   
   <img
     data-sizes="auto"
@@ -11,7 +11,7 @@
     src={{ $blurImage.RelPermalink }}
     data-srcset="
       {{ $blurImage.RelPermalink }} 160w,
-      {{ $image.RelPermalink }} 320w
+      {{ $image.RelPermalink }} 640w
     "
     alt={{ .Title }}
   />
